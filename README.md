@@ -1,4 +1,6 @@
 Qlite
 =====
 
-Llittle library for handling promises.
+Little library for handling promises.
+
+
