@@ -137,14 +137,14 @@
          * @returns {Promise}
          */
         all: function (promiseArray) {
-            var defered = new Promise(),
+            var deferred = new Promise(),
                 i;
             for (i = 0; promiseArray.length > i; i += 1) {
                 if (isPromise(promiseArray[i])) {
-                    defered.depends(promiseArray[i]);
+                    deferred.depends(promiseArray[i]);
                 }
             }
-            return defered;
+            return deferred;
         },
         /**
          *
