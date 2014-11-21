@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Qlite Test</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="../Qlite.js"></script>
+        <style>
+            * {
+                margin: 2px;
+                padding: 2px 4px;
+                font-family: Arial;
+            }
+            .resolved {
+                background: #5f5;
+            }
+            .pending {
+                background: #55f;
+                color: #fff;
+                font-weight: bold;
+            }
+            .rejected {
+                background: #f55;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Qlite Test</h1>
+        <h4>Q.defer()</h4>
+        <button onclick="resolve(a)">resolve(a)</button>
+        <button onclick="delay(a)">delay(a)</button>
+        <button onclick="reject(a)">reject(a)</button>
+        <p id="a" class="pending">a Pending</p>
+        <button onclick="resolve(b)">resolve(b)</button>
+        <button onclick="delay(b)">delay(b)</button>
+        <button onclick="reject(b)">reject(b)</button>
+        <p id="b" class="pending">b Pending</p>
+        <button onclick="resolve(c)">resolve(c)</button>
+        <button onclick="delay(c)">delay(c)</button>
+        <button onclick="reject(c)">reject(c)</button>
+        <p id="c" class="pending">c Pending</p>
+        <button onclick="resolve(d)">resolve(d)</button>
+        <button onclick="delay(d)">delay(d)</button>
+        <button onclick="reject(d)">reject(d)</button>
+        <p id="d" class="pending">d Pending</p>
+        
+        <h4>Q.all()</h4>
+        <p id="ab" class="pending">ab Pending</p>
+        <p id="ac" class="pending">ac Pending</p>
+        <p id="ad" class="pending">ad Pending</p>
+        <p id="abc" class="pending">abc Pending</p>
+        <p id="abd" class="pending">abd Pending</p>
+        <p id="abcd" class="pending">abcd Pending</p>
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        
+        <script>
+        var a = Q.defer();
+        var b = Q.defer();
+        var c = Q.defer();
+        var d = Q.defer();
+
+        var resolve = function (deferred) {
+            deferred.resolve();
+        };
+
+        var reject = function (deferred) {
+            deferred.reject();
+        };
+
+        var delay = function (deferred) {
+            setTimeout(function () {
+                deferred.resolve();
+            }, 4000);
+        };
+
+        var foo = a.then(function () {
+            $("#a").addClass("resolved").removeClass("pending").text("a Resolved");
+        }).catch(function () {
+            $("#a").addClass("rejected").removeClass("pending").text("a Rejected");
+        });
+        b.then(function () {
+            $("#b").addClass("resolved").removeClass("pending").text("b Resolved");
+        }).catch(function () {
+            $("#b").addClass("rejected").removeClass("pending").text("b Rejected");
+        });
+        c.then(function () {
+            $("#c").addClass("resolved").removeClass("pending").text("c Resolved");
+        }).catch(function () {
+            $("#c").addClass("rejected").removeClass("pending").text("c Rejected");
+        });
+        d.then(function () {
+            $("#d").addClass("resolved").removeClass("pending").text("d Resolved");
+        }).catch(function () {
+            $("#d").addClass("rejected").removeClass("pending").text("d Rejected");
+        });
+        Q.all([a, b]).then(function () {
+            $("#ab").addClass("resolved").removeClass("pending").text("ab Resolved");
+        }).catch(function () {
+            $("#ab").addClass("rejected").removeClass("pending").text("ab Rejected");
+        });
+        Q.all([a, b, c]).then(function () {
+            $("#abc").addClass("resolved").removeClass("pending").text("abc Resolved");
+        }).catch(function () {
+            $("#abc").addClass("rejected").removeClass("pending").text("abc Rejected");
+        });
+        Q.all([a, b, d]).then(function () {
+            $("#abd").addClass("resolved").removeClass("pending").text("abd Resolved");
+        }).catch(function () {
+            $("#abd").addClass("rejected").removeClass("pending").text("abd Rejected");
+        });
+        Q.all([a, b, c, d]).then(function () {
+            $("#abcd").addClass("resolved").removeClass("pending").text("abcd Resolved");
+        }).catch(function () {
+            $("#abcd").addClass("rejected").removeClass("pending").text("abcd Rejected");
+        });
+        Q.all([a, c]).then(function () {
+            $("#ac").addClass("resolved").removeClass("pending").text("ac Resolved");
+        }).catch(function () {
+            $("#ac").addClass("rejected").removeClass("pending").text("ac Rejected");
+        });
+        Q.all([a, d]).then(function () {
+            $("#ad").addClass("resolved").removeClass("pending").text("ad Resolved");
+        }).catch(function () {
+            $("#ad").addClass("rejected").removeClass("pending").text("ad Rejected");
+        });
+
+        </script>
+    </body>
+</html>

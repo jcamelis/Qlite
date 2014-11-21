@@ -23,6 +23,7 @@
     function Promise() {
         this.stack = [];
         this.dependsStack = [];
+        this.catchStack = [];
         this.status = PENDING;
         this.reason = '';
         this.resolvedArgs = [];
@@ -60,12 +61,14 @@
      * @returns {void}
      */
     Promise.prototype.resolve = function () {
-        this.status = RESOLVED;
-        this.resolvedArgs = Array.prototype.slice.call(arguments, 0);
-        var i;
-        for (i = 0; this.stack.length > i; i += 1) {
-            if (isFunction(this.stack[i])) {
-                this.stack[i].apply(this.stack[i], this.resolvedArgs);
+        if (this.isPending()) {
+            this.status = RESOLVED;
+            this.resolvedArgs = Array.prototype.slice.call(arguments, 0);
+            var i;
+            for (i = 0; this.stack.length > i; i += 1) {
+                if (isFunction(this.stack[i])) {
+                    this.stack[i].apply(this.stack[i], this.resolvedArgs);
+                }
             }
         }
     };
@@ -74,9 +77,16 @@
     * @returns {void}
     */
     Promise.prototype.reject = function (reason) {
-        this.status = REJECTED;
-        this.reason = reason;
-        this.prototype.catch.call(this, this.reason);
+        if (this.isPending()) {
+            this.status = REJECTED;
+            this.reason = reason;
+            var i;
+            for (i = 0; this.catchStack.length > i; i += 1) {
+                if (isFunction(this.catchStack[i])) {
+                    this.catchStack[i].call(this.catchStack[i], this.reason);
+                }
+            }
+        }
     };
     /**
      *
@@ -110,11 +120,11 @@
                 for (i = 0; that.dependsStack.length > i; i += 1) {
                     if (that.dependsStack[i].isPending()) {
                         return;
-//                    } else if (that.dependsStack[i].isRejected()) {
-//                        return that.dependsStack[i].reason;
                     }
                 }
                 that.resolve();
+            }).catch(function (reason) {
+                that.reject(reason);
             });
         } else {
             throw new TypeError("Expected promise to be a Promise instance");
@@ -122,10 +132,16 @@
         return this;
     };
     /**
-     * @todo Implement
-     * @returns {void}
+     * 
+     * @param {function} callback
+     * @returns {Promise}
      */
-    Promise.prototype["catch"] = function () { };
+    Promise.prototype["catch"] = function (callback) {
+        if (isFunction(callback)) {
+            this.catchStack.push(callback);
+        }
+        return this;
+    };
     /**
      *
      * @type Object
@@ -142,6 +158,8 @@
             for (i = 0; promiseArray.length > i; i += 1) {
                 if (isPromise(promiseArray[i])) {
                     deferred.depends(promiseArray[i]);
+                } else {
+                    throw new TypeError("Promise instance expected.");
                 }
             }
             return deferred;
