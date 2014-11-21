@@ -138,7 +138,14 @@
      */
     Promise.prototype["catch"] = function (callback) {
         if (isFunction(callback)) {
-            this.catchStack.push(callback);
+            
+            if (this.isPending()) {
+                this.catchStack.push(callback);
+            } else {
+                callback.call(callback, this.reason);
+            }
+        } else {
+            throw new TypeError("Expected callback to be a function.");
         }
         return this;
     };
