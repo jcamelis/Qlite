@@ -1,0 +1,12 @@
+{
+  "name": "Qlite",
+  "version": "0.0.4",
+  "description": "Little promise library",
+  "homepage": "https://github.com/jcamelis/Qlite",
+  "devDependencies": {
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-contrib-qunit": "^0.5.2",
+    "grunt-contrib-uglify": "^0.6.0",
+    "grunt-contrib-watch": "^0.6.1"
+  }
+}

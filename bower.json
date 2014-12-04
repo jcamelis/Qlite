@@ -1,6 +1,6 @@
 {
     "name": "Qlite",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "main": "Qlite.js",
     "ignore": ["test/**" ]
 }

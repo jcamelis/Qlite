@@ -52,7 +52,6 @@
         <p id="abd" class="pending">abd Pending</p>
         <p id="abcd" class="pending">abcd Pending</p>
 
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
         
         <script>
         var a = Q.defer();
@@ -73,56 +72,62 @@
                 deferred.resolve();
             }, 4000);
         };
+        
+        function update(elementId, status, message) {
+            var element = document.getElementById(elementId);
+            element.className = status;
+            element.innerText = message || elementId + " " + status;
+        }
 
         var foo = a.then(function () {
-            $("#a").addClass("resolved").removeClass("pending").text("a Resolved");
+            update("a", "resolved");
         }).catch(function () {
-            $("#a").addClass("rejected").removeClass("pending").text("a Rejected");
+            update("a", "rejected");
         });
         b.then(function () {
-            $("#b").addClass("resolved").removeClass("pending").text("b Resolved");
+            update("b", "resolved");
         }).catch(function () {
-            $("#b").addClass("rejected").removeClass("pending").text("b Rejected");
+            update("b", "rejected");
         });
         c.then(function () {
-            $("#c").addClass("resolved").removeClass("pending").text("c Resolved");
+            update("c", "resolved");
         }).catch(function () {
-            $("#c").addClass("rejected").removeClass("pending").text("c Rejected");
+            update("c", "rejected");
         });
         d.then(function () {
-            $("#d").addClass("resolved").removeClass("pending").text("d Resolved");
+            update("d", "resolved");
         }).catch(function () {
-            $("#d").addClass("rejected").removeClass("pending").text("d Rejected");
+            update("d", "rejected");
         });
         Q.all([a, b]).then(function () {
-            $("#ab").addClass("resolved").removeClass("pending").text("ab Resolved");
+            update("ab", "resolved");
         }).catch(function () {
-            $("#ab").addClass("rejected").removeClass("pending").text("ab Rejected");
+            update("ab", "rejected");
         });
         Q.all([a, b, c]).then(function () {
-            $("#abc").addClass("resolved").removeClass("pending").text("abc Resolved");
+            update("abc", "resolved");
         }).catch(function () {
-            $("#abc").addClass("rejected").removeClass("pending").text("abc Rejected");
+            update("abc", "rejected");
         });
         Q.all([a, b, d]).then(function () {
-            $("#abd").addClass("resolved").removeClass("pending").text("abd Resolved");
+            update("abd", "resolved");
         }).catch(function () {
-            $("#abd").addClass("rejected").removeClass("pending").text("abd Rejected");
+            update("abd", "rejected");
         });
         Q.all([a, b, c, d]).then(function () {
-            $("#abcd").addClass("resolved").removeClass("pending").text("abcd Resolved");
+            update("abcd", "resolved");
         }).catch(function () {
-            $("#abcd").addClass("rejected").removeClass("pending").text("abcd Rejected");
+            update("abcd", "rejected");
         });
         Q.all([a, c]).then(function () {
-            $("#ac").addClass("resolved").removeClass("pending").text("ac Resolved");
+            update("ac", "resolved");
         }).catch(function () {
-            $("#ac").addClass("rejected").removeClass("pending").text("ac Rejected");
+            update("ac", "rejected");
         });
         Q.all([a, d]).then(function () {
-            $("#ad").addClass("resolved").removeClass("pending").text("ad Resolved");
+            update("ad", "resolved");
         }).catch(function () {
-            $("#ad").addClass("rejected").removeClass("pending").text("ad Rejected");
+            update("ad", "rejected");
         });
 
         </script>
